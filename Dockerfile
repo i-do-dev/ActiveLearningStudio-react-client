@@ -2,12 +2,20 @@ FROM node:10 as build
 
 WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
+ARG DOMAIN
+ENV DOMAIN_URL=$DOMAIN
 COPY ./package*.json ./
 RUN npm install
+RUN apt-get install git -y
+
 COPY . .
+RUN git --no-pager log -10 > log.txt
 
 RUN npm install --no-package-lock
 RUN npm run build
+
+COPY . .
+RUN mv log.txt build/
 
 # -- RELEASE --
 FROM nginx:stable-alpine as release

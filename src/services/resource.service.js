@@ -244,7 +244,7 @@ const h5pResourceSettingsShared = (activityId) =>
     .get(`/${apiVersion}/activities/${activityId}/h5p-resource-settings-shared`)
     .then(({ data }) => data)
     .catch((err) => {
-      Promise.reject(err.response.data);
+      return Promise.reject(err.response.data);
     });
 
 const h5pResourceSettingsEmbed = (activityId) =>
@@ -295,6 +295,10 @@ const searchPreviewActivity = (subOrgId, activityId) =>
     .get(`/${apiVersion}/suborganization/${subOrgId}/activities/${activityId}/search-preview`)
     .then(({ data }) => data)
     .catch((err) => Promise.reject(err.response.data));
+const searchPreviewIndependentActivity = (subOrgId, independent_activity) => httpService
+  .get(`/${apiVersion}/suborganization/${subOrgId}/independent-activities/${independent_activity}/search-preview`)
+  .then(({ data }) => data)
+  .catch((err) => Promise.reject(err.response.data));
 
 export default {
   getAll,
@@ -333,4 +337,5 @@ export default {
   getAllLayout,
   getSingleLayout,
   searchPreviewActivity,
+  searchPreviewIndependentActivity,
 };
