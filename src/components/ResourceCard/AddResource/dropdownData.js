@@ -23,6 +23,7 @@ export const educationLevels = [
   { name: 'Special Education', value: '9' },
 ];
 
+// LMS Integrations
 export const integratedLMS = [
   { name: 'Moodle', value: 'moodle' },
   { name: 'Canvas', value: 'canvas' },
