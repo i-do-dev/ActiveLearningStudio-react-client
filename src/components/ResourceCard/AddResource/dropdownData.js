@@ -32,4 +32,5 @@ export const integratedLMS = [
   { name: 'D2L', value: 'd2l' },
   { name: 'Sakai', value: 'sakai' },
   { name: 'WordPress', value: 'wordpress' },
+  { name: 'Ms Teams', value: 'msteams' },
 ];

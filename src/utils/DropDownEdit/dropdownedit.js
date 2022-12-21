@@ -15,7 +15,7 @@ import SharePreviewPopup from 'components/SharePreviewPopup';
 import indActivityService from 'services/indActivities.service';
 import { visibilityTypes } from 'store/actions/project';
 import ActivityCard from 'components/ActivityCard';
-import { getProjectId, googleShare } from 'store/actions/gapi';
+import { getProjectId, googleShare, shareToCanvas, msTeamShare } from 'store/actions/gapi';
 import ShareLinkSmSvg from 'iconLibrary/dropDown/ShareLinkSmSvg';
 import RightAngleSmSvg from 'iconLibrary/dropDown/RightAngleSmSvg';
 import DuplicateSmSvg from 'iconLibrary/dropDown/DuplicateSmSvg';
@@ -43,16 +43,20 @@ const DropDownEdit = ({
   const dispatch = useDispatch();
   // console.log("activities", data);
   const primaryColor = getGlobalColor('--main-primary-color');
+  // useEffect(() => {
+  //   (async () => {
+  //     if (project?.visibilityTypes.length === 0) {
+  //       const { data } = await dispatch(visibilityTypes());
+  //       setVisibilityTypeArray(data.data);
+  //     } else {
+  //       setVisibilityTypeArray(project?.visibilityTypes?.data);
+  //     }
+  //   })();
+  // }, [project?.visibilityTypes]);
+
   useEffect(() => {
-    (async () => {
-      if (project?.visibilityTypes.length === 0) {
-        const { data } = await dispatch(visibilityTypes());
-        setVisibilityTypeArray(data.data);
-      } else {
-        setVisibilityTypeArray(project?.visibilityTypes?.data);
-      }
-    })();
-  }, [project?.visibilityTypes]);
+    setVisibilityTypeArray(activeOrganization?.allowed_visibility_type_id);
+  }, [activeOrganization]);
   return (
     <div className="curriki-utility-activity-dropdown">
       <Dropdown className="activity-dropdown check ">
@@ -314,7 +318,7 @@ const DropDownEdit = ({
                       xAPI Format
                     </a>
                   </li>
-                  <li
+                  {/* <li
                     onClick={() => {
                       Swal.fire({
                         title: 'Please Wait !',
@@ -335,7 +339,7 @@ const DropDownEdit = ({
                     }}
                   >
                     <a>H5P Format</a>
-                  </li>
+                  </li> */}
                 </ul>
               </li>
 
@@ -520,15 +524,30 @@ const DropDownEdit = ({
                 &nbsp; Publish
               </a>
               <ul className="dropdown-menu check">
-                <li
-                  onClick={() => {
-                    handleShow();
-                    setSelectedActivityId(data.id);
-                    dispatch(googleShare(false));
-                  }}
-                >
-                  <a>Google Classroom</a>
-                </li>
+                {activeOrganization?.gcr_activity_visibility && (
+                  <li
+                    onClick={() => {
+                      handleShow();
+                      setSelectedActivityId(data.id);
+                      dispatch(googleShare(false));
+                    }}
+                  >
+                    <a>Google Classroom</a>
+                  </li>
+                )}
+                {activeOrganization?.msteam_activity_visibility && (
+                  <li
+                    onClick={() => {
+                      handleShow();
+                      setSelectedActivityId(data.id);
+                      dispatch(msTeamShare(true));
+                      dispatch(googleShare(true));
+                      dispatch(shareToCanvas(false));
+                    }}
+                  >
+                    <a>Microsoft Teams</a>
+                  </li>
+                )}
               </ul>
             </li>
           )}
